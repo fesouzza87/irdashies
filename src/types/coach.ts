@@ -33,8 +33,16 @@ export interface CoachTurns {
   steer: number[];
 }
 
+/**
+ * What the coach follows on a track with this car: your best lap, the
+ * imported ("professor's") lap, or half-way between the two.
+ */
+export type CoachFollowMode = 'mine' | 'pro' | 'mix';
+
 /** Everything the coach keeps for one track (and car). */
 export interface CoachTrackData {
+  /** Your choice for this track and car; null = the widget's default. */
+  follow: CoachFollowMode | null;
   notes: CoachNote[];
   /** Where the tips came from (a track guide), shown in Settings. */
   notesSource: string;
@@ -51,6 +59,8 @@ export interface CoachSessionInfo {
   trackName: string;
   carPath: string;
   carName: string;
+  /** e.g. "GT3 Class" (CarClassShortName); '' when unknown. */
+  carClass: string;
   /** From WeekendInfo.TrackLength; null when it cannot be read. */
   lengthM: number | null;
 }
@@ -69,6 +79,12 @@ export interface CoachBridge {
     marks: CoachMark[]
   ) => Promise<void>;
   clearMarks: (trackKey: string, carPath: string) => Promise<void>;
+  /** null goes back to the widget's default. */
+  setFollow: (
+    trackKey: string,
+    carPath: string,
+    mode: CoachFollowMode | null
+  ) => Promise<void>;
   /** Kept only when the track has none yet (the first clean lap). */
   saveTurns: (trackKey: string, turns: CoachTurns) => Promise<void>;
   getCurrentSession: () => Promise<CoachSessionInfo | null>;

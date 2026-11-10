@@ -13,6 +13,7 @@ import {
   saveCoachMarks,
   saveCoachNotes,
   saveCoachTurns,
+  setCoachFollow,
 } from '../storage/coachData';
 
 /** Messages the braking coach listens for in every window. */
@@ -50,6 +51,7 @@ export const coachSessionFromSession = (
       .join(' – '),
     carPath: player.CarPath,
     carName: player.CarScreenName || player.CarPath,
+    carClass: player.CarClassShortName || '',
     lengthM: Number.isFinite(length) && length > 0 ? length : null,
   };
 };
@@ -68,7 +70,13 @@ export const setupCoachBridge = (overlayManager?: OverlayManager) => {
         return await getCoachTrackData(trackKey, carPath);
       } catch (e) {
         logger.warn('[Coach] Failed to read track data', e);
-        return { notes: [], notesSource: '', marks: [], turns: null };
+        return {
+          follow: null,
+          notes: [],
+          notesSource: '',
+          marks: [],
+          turns: null,
+        };
       }
     }
   );
@@ -112,6 +120,17 @@ export const setupCoachBridge = (overlayManager?: OverlayManager) => {
         throw new TypeError('Invalid payload for coach:clearMarks');
       }
       await clearCoachMarks(trackKey, carPath);
+      changed(trackKey);
+    }
+  );
+
+  ipcMain.handle(
+    'coach:setFollow',
+    async (_, trackKey: unknown, carPath: unknown, mode: unknown) => {
+      if (!isKey(trackKey) || !isKey(carPath)) {
+        throw new TypeError('Invalid payload for coach:setFollow');
+      }
+      await setCoachFollow(trackKey, carPath, mode);
       changed(trackKey);
     }
   );

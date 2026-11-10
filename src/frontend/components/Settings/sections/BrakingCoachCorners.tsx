@@ -1,18 +1,23 @@
 import { t } from '@irdashies/frontend/i18n';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { CoachSessionInfo, LapTraceSource } from '@irdashies/types';
+import type {
+  CoachFollowMode,
+  CoachSessionInfo,
+  LapTraceSource,
+} from '@irdashies/types';
 import logger from '@irdashies/utils/logger';
 import { DirIcon } from '../../BrakingCoach/BrakingCoachView';
-import { coachCornersFor } from '../../BrakingCoach/engine/coachCorners';
 import {
   coachTableRows,
   coachTableToSave,
   type CoachTableRow,
 } from '../../BrakingCoach/engine/coachTable';
 import {
-  useCoachTrackData,
-  useStoredCoachRef,
+  useCoachModel,
+  useLapRevision,
+  type CoachContext,
 } from '../../BrakingCoach/hooks/useCoachSetup';
+import { SettingSelectRow } from '../components/SettingSelectRow';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 
 const INPUT =
@@ -55,48 +60,47 @@ export const BrakingCoachCorners = ({
   }, []);
   useEffect(refresh, [refresh]);
 
-  const trackKey = session?.trackKey ?? null;
-  const carPath = session?.carPath ?? '';
-  const trackId = session?.trackId ?? null;
-  const data = useCoachTrackData(trackKey, carPath);
-  const [lapRevision, setLapRevision] = useState(0);
-  useEffect(
+  const ctx = useMemo<CoachContext | null>(
     () =>
-      window.lapTraceBridge?.onReferenceUpdated?.(() =>
-        setLapRevision((r) => r + 1)
-      ),
-    []
+      session
+        ? {
+            trackKey: session.trackKey,
+            trackId: session.trackId,
+            carPath: session.carPath,
+            carName: session.carName,
+            carClass: session.carClass,
+            trackName: session.trackName,
+            lengthM: session.lengthM,
+          }
+        : null,
+    [session]
   );
-  const imported = referenceSource !== 'best';
-  const mine = useStoredCoachRef(
-    !imported || blend,
-    trackId,
-    carPath,
-    'best',
-    lapRevision
-  );
-  const pro = useStoredCoachRef(
-    imported,
-    trackId,
-    carPath,
+  const lapRevision = useLapRevision();
+  const model = useCoachModel(
+    ctx,
     referenceSource,
+    blend,
+    undefined,
     lapRevision
   );
-  const lengthM = session?.lengthM ?? mine?.lengthM ?? pro?.lengthM ?? null;
-  const mode = pro && mine && blend ? 'mix' : pro ? 'pro' : 'mine';
+  const { data, mine, pro, proFit, proLabel, mode } = model;
+  const lengthM = model.lengthM ?? mine?.lengthM ?? pro?.lengthM ?? null;
 
-  const baseRows = useMemo(() => {
-    const { corners } = coachCornersFor({
-      mine,
-      pro,
-      mode,
-      notes: data.notes,
-      marks: data.marks,
-      turns: data.turns,
-      lengthM,
-    });
-    return coachTableRows(corners, data.notes, lengthM ?? 4000);
-  }, [mine, pro, mode, data, lengthM]);
+  const baseRows = useMemo(
+    () => coachTableRows(model.corners, data.notes, lengthM ?? 4000),
+    [model.corners, data.notes, lengthM]
+  );
+
+  const setFollow = (value: CoachFollowMode | 'auto') => {
+    if (!session) return;
+    window.coachBridge
+      ?.setFollow(
+        session.trackKey,
+        session.carPath,
+        value === 'auto' ? null : value
+      )
+      .catch((e) => logger.warn('[Coach] Failed to save the follow mode', e));
+  };
 
   const [rows, setRows] = useState<CoachTableRow[]>(baseRows);
   const [dirty, setDirty] = useState(false);
@@ -178,6 +182,50 @@ export const BrakingCoachCorners = ({
           </p>
         )}
       </div>
+      <SettingSelectRow<CoachFollowMode | 'auto'>
+        title={t('Follow on this track and car')}
+        description={t(
+          'Your best lap, the imported lap (.ibt or Garage 61), or half-way between the two. Automatic follows the widget settings.'
+        )}
+        value={data.follow ?? 'auto'}
+        options={[
+          { value: 'auto', label: t('Automatic') },
+          { value: 'mine', label: t('My best lap'), disabled: !mine },
+          { value: 'pro', label: t('Imported lap'), disabled: !pro },
+          {
+            value: 'mix',
+            label: t('Half-way'),
+            disabled: !mine || !pro,
+          },
+        ]}
+        onChange={setFollow}
+      />
+      <p className="text-xs text-slate-400">
+        {t('Following now: {mode}', {
+          mode:
+            mode === 'mine'
+              ? t('My best lap')
+              : mode === 'pro'
+                ? t('Imported lap')
+                : t('Half-way'),
+        })}
+        {proLabel && (
+          <>
+            {' · '}
+            {proFit === 'mismatch'
+              ? t(
+                  'The imported lap ({label}) is from another track or car category: the coach does not use it here.',
+                  { label: proLabel }
+                )
+              : proFit === 'otherCar'
+                ? t(
+                    'Imported lap: {label}, driven in another car of the same category (its gears and brake pressures are left out).',
+                    { label: proLabel }
+                  )
+                : t('Imported lap: {label}', { label: proLabel })}
+          </>
+        )}
+      </p>
       <p className="text-xs text-slate-500">
         {t(
           'Tips, labels and the spoken reference point are kept for the track; minimum, gear and your marked brake points for this car. Press the "Braking Coach: Mark Brake Point" key (Ctrl+Shift+B by default) where you brake to mark it.'

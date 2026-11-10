@@ -3,6 +3,7 @@ import fsp from 'node:fs/promises';
 import path from 'node:path';
 import {
   coachSafeName,
+  type CoachFollowMode,
   type CoachMark,
   type CoachNote,
   type CoachTrackData,
@@ -78,7 +79,11 @@ export const getCoachTrackData = async (
     ? await readJson(fileFor('marks', trackKey, carPath))
     : null;
   const turnsDoc = await readJson(fileFor('turns', trackKey));
+  const follow = carPath
+    ? field(await readJson(followFile()), followKey(trackKey, carPath))
+    : null;
   return {
+    follow: isFollowMode(follow) ? follow : null,
     notes: cleanNotes(field(notesDoc, 'corners')),
     notesSource: String(field(notesDoc, 'source') ?? ''),
     marks: cleanMarks(field(marksDoc, 'marks')),
@@ -144,4 +149,27 @@ export const saveCoachTurns = async (
     steer: clean.steer,
   });
   return true;
+};
+
+/** follow.json: one choice per track and car, as Dex keeps it. */
+const followFile = () => path.join(coachDir(), 'follow.json');
+const followKey = (trackKey: string, carPath: string) =>
+  `${coachSafeName(trackKey)}__${coachSafeName(carPath)}`;
+const isFollowMode = (v: unknown): v is CoachFollowMode =>
+  v === 'mine' || v === 'pro' || v === 'mix';
+
+export const setCoachFollow = async (
+  trackKey: string,
+  carPath: string,
+  mode: unknown
+): Promise<void> => {
+  const doc = await readJson(followFile());
+  const key = followKey(trackKey, carPath);
+  const all = Object.fromEntries(
+    Object.entries(
+      doc && typeof doc === 'object' && !Array.isArray(doc) ? doc : {}
+    ).filter(([k]) => k !== key)
+  );
+  if (isFollowMode(mode)) all[key] = mode;
+  await writeJson(followFile(), all);
 };

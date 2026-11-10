@@ -24,6 +24,7 @@ export const BrakingCoach = (props: BrakingCoachProps) => {
     volume: config.volume,
     lookS: config.lookS,
     feedback: config.feedback,
+    referenceSource: config.referenceSource,
     blend: config.blend,
     sayRef: config.sayRef,
     voiceRate: config.voiceRate,

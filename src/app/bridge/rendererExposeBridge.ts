@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import type {
   CoachBridge,
+  CoachFollowMode,
   CoachMark,
   CoachNote,
   CoachTurns,
@@ -434,6 +435,11 @@ export function exposeBridge() {
       ),
     clearMarks: (trackKey: string, carPath: string) =>
       ipcRenderer.invoke('coach:clearMarks', trackKey, carPath),
+    setFollow: (
+      trackKey: string,
+      carPath: string,
+      mode: CoachFollowMode | null
+    ) => ipcRenderer.invoke('coach:setFollow', trackKey, carPath, mode),
     saveTurns: (trackKey: string, turns: CoachTurns) =>
       ipcRenderer.invoke('coach:saveTurns', trackKey, turns),
     getCurrentSession: () => ipcRenderer.invoke('coach:getCurrentSession'),

@@ -34,6 +34,7 @@ const listeners = new Set<(key: string) => void>();
 
 const coachBridge: CoachBridge = {
   getTrackData: async (): Promise<CoachTrackData> => ({
+    follow: null,
     notes: store.notes,
     notesSource: 'Guia de exemplo',
     marks: store.marks,
@@ -47,6 +48,7 @@ const coachBridge: CoachBridge = {
     store.marks = marks;
     listeners.forEach((cb) => cb(key));
   },
+  setFollow: async () => undefined,
   clearMarks: async (key) => {
     store.marks = [];
     listeners.forEach((cb) => cb(key));
@@ -59,6 +61,7 @@ const coachBridge: CoachBridge = {
     trackName: 'Pista de exemplo',
     carPath: lap.carPath,
     carName: 'Carro de exemplo',
+    carClass: '',
     lengthM: L,
   }),
   onChanged: (cb) => {

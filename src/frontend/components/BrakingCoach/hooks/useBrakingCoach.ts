@@ -3,6 +3,7 @@ import type {
   BrakingCoachBeep,
   BrakingCoachLevel,
   LapTraceSampleSnapshot,
+  LapTraceSource,
 } from '@irdashies/types';
 import {
   getChannelSnapshotStore,
@@ -45,6 +46,8 @@ export interface BrakingCoachOptions {
   volume: number;
   lookS: number;
   feedback: boolean;
+  /** Which imported lap to prefer ('best': follow your best by default). */
+  referenceSource: LapTraceSource;
   /** With an imported reference, coach half-way between it and your best. */
   blend: boolean;
   /** Read out the corners' spoken reference points. */
@@ -99,7 +102,7 @@ const toSample = (s: LapTraceSampleSnapshot) => ({
  * corner turns) and answers the "mark brake point" key.
  */
 export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
-  const setup = useCoachSetup(options.blend);
+  const setup = useCoachSetup(options.referenceSource, options.blend);
   const { corners, timing, lengthM, trackKey } = setup;
   const trackName = useTrackDisplayName();
   const tracker = useRef<CoachTracker | null>(null);

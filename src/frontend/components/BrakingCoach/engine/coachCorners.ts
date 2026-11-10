@@ -14,7 +14,8 @@ import type {
   DetectedCorner,
 } from './types';
 
-export type CoachFollowMode = 'mine' | 'pro' | 'mix';
+export type { CoachFollowMode } from '@irdashies/types';
+import type { CoachFollowMode } from '@irdashies/types';
 
 const SUFFIXES = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -259,6 +260,7 @@ export function coachCornersFor({
   marks,
   turns,
   lengthM,
+  proOtherCar = false,
 }: {
   mine: CoachRef | null;
   pro: CoachRef | null;
@@ -267,9 +269,19 @@ export function coachCornersFor({
   marks: readonly CoachMark[];
   turns: CoachTurns | null;
   lengthM: number | null;
+  /** The imported lap was driven in another car of the same category. */
+  proOtherCar?: boolean;
 }): { corners: CoachCorner[]; timing: CoachRef | null } {
   const length = lengthM || mine?.lengthM || pro?.lengthM || null;
-  const out = effectiveCorners(mine, pro, mode, notes, marks, length);
+  const out = effectiveCorners(
+    mine,
+    pro,
+    mode,
+    notes,
+    marks,
+    length,
+    proOtherCar
+  );
   addCornerDirs(out.corners, turns?.steer, length);
   return out;
 }

@@ -2724,4 +2724,17 @@ export const ptBR: Readonly<Record<string, string>> = {
   'Which Windows voice reads the reference points. Automatic picks one in the app language (for Brazilian Portuguese, Microsoft Maria when installed).':
     'Qual voz do Windows lê os pontos de referência. Automática escolhe uma no idioma do app (para português do Brasil, a Microsoft Maria, se estiver instalada).',
   'Automatic (app language)': 'Automática (idioma do app)',
+  // Braking coach — what to follow
+  'Follow on this track and car': 'O que seguir nesta pista e carro',
+  'Your best lap, the imported lap (.ibt or Garage 61), or half-way between the two. Automatic follows the widget settings.':
+    'A sua melhor volta, a volta importada (.ibt ou Garage 61) ou o meio-termo entre as duas. Automático segue as configurações do widget.',
+  Automatic: 'Automático',
+  'Imported lap': 'Volta importada',
+  'Half-way': 'Meio-termo',
+  'Following now: {mode}': 'Seguindo agora: {mode}',
+  'The imported lap ({label}) is from another track or car category: the coach does not use it here.':
+    'A volta importada ({label}) é de outra pista ou de outra categoria de carro: o coach não a usa aqui.',
+  'Imported lap: {label}, driven in another car of the same category (its gears and brake pressures are left out).':
+    'Volta importada: {label}, feita com outro carro da mesma categoria (as marchas e pressões de freio dela ficam de fora).',
+  'Imported lap: {label}': 'Volta importada: {label}',
 };
