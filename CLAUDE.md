@@ -106,7 +106,15 @@ perfis, servidor web para OBS (`localhost:3000/dashboard`), temas, atalhos de te
 - Tema de cores laranja, preto e dourado como opção nas configurações de aparência.
 - Pronto quando: o tema for aplicado em todos os widgets.
 
-### 12. Integração com o Garage 61 (API oficial)
+### 12. Voltas importadas por pista e carro
+
+- Guardar as voltas importadas (Garage 61 e `.ibt`) por pista e carro, em vez de um único espaço global para cada tipo: importar uma volta nova não substitui as de outras combinações de pista e carro.
+- Ao entrar numa sessão, o coach e o Lap Trace usam a volta importada da pista e do carro atuais; sem ela, uma de outro carro da mesma categoria na mesma pista, como já acontece hoje.
+- Migrar as voltas que já estão nos espaços globais para a pista e o carro de origem delas.
+- Lista nas configurações com as voltas salvas (pista, carro, origem, piloto ou arquivo, tempo de volta e data), com opção de apagar cada uma.
+- Pronto quando: duas voltas importadas de combinações diferentes continuarem salvas lado a lado, cada sessão usar a da sua pista e carro, e apagar uma pela lista a remover sem afetar as outras.
+
+### 13. Integração com o Garage 61 (API oficial)
 
 - Autenticação por Personal Access Token do Garage 61. O token fica salvo só localmente, nas configurações do app; nunca vai para o repositório, logs ou exports de dashboard.
 - Ao entrar numa sessão, identificar pista e carro e buscar a volta de referência no Garage 61.
@@ -115,7 +123,7 @@ perfis, servidor web para OBS (`localhost:3000/dashboard`), temas, atalhos de te
 - Substitui a importação manual de referências; a importação de `.ibt` continua disponível como alternativa.
 - Pronto quando (sugestão, a confirmar com o Fernando): numa sessão real, a referência do Garage 61 for baixada e usada pelo coach sem nenhuma importação manual, respeitando a prioridade escolhida, e continuar disponível offline a partir do cache.
 
-### 13. Linha da volta de referência no Track Map
+### 14. Linha da volta de referência no Track Map
 
 - Desenhar no Track Map (e no Flat Track Map, se fizer sentido) a linha percorrida pela volta de referência: minha melhor volta, `.ibt` importado ou Garage 61.
 - Posição a partir de latitude/longitude: o CSV do Garage 61 já traz `Lat`/`Lon` e a telemetria do iRacing também; a gravação da minha melhor volta passa a guardar esses dois canais.
@@ -123,7 +131,7 @@ perfis, servidor web para OBS (`localhost:3000/dashboard`), temas, atalhos de te
 - Opções: liga/desliga, cor, espessura e opacidade da linha; opcionalmente destacar os pontos de freio e de retomada do acelerador.
 - Pronto quando: a linha aparecer sobre a pista certa numa sessão real, alinhada ao traçado do mapa, para uma volta gravada e para uma importada do Garage 61.
 
-### 14. (Opcional) Monitor de stream
+### 15. (Opcional) Monitor de stream
 
 - Painel simples com status da sessão, FPS e qualidade de rede do iRacing, para quem transmite.
 - Escopo a definir com o Fernando antes de implementar.
