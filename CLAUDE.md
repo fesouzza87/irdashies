@@ -65,5 +65,6 @@ perfis, servidor web para OBS (`localhost:3000/dashboard`), temas, atalhos de te
 ## Fluxo de trabalho
 
 - Um branch por item do backlog e um commit por etapa funcional.
+- Push e pull requests só no fork `fesouzza87/irdashies`. **Nunca** abrir pull request (nem issue ou comentário) no repositório original `tariknz/irdashies`; ao usar `gh`, passar sempre `--repo fesouzza87/irdashies`.
 - Rodar `npm run lint` e `npm run test` antes de cada commit.
 - Testar no iRacing real (sessão Test Drive) antes de marcar o item como pronto.
