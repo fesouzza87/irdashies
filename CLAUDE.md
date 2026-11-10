@@ -115,7 +115,15 @@ perfis, servidor web para OBS (`localhost:3000/dashboard`), temas, atalhos de te
 - Substitui a importação manual de referências; a importação de `.ibt` continua disponível como alternativa.
 - Pronto quando (sugestão, a confirmar com o Fernando): numa sessão real, a referência do Garage 61 for baixada e usada pelo coach sem nenhuma importação manual, respeitando a prioridade escolhida, e continuar disponível offline a partir do cache.
 
-### 13. (Opcional) Monitor de stream
+### 13. Linha da volta de referência no Track Map
+
+- Desenhar no Track Map (e no Flat Track Map, se fizer sentido) a linha percorrida pela volta de referência: minha melhor volta, `.ibt` importado ou Garage 61.
+- Posição a partir de latitude/longitude: o CSV do Garage 61 já traz `Lat`/`Lon` e a telemetria do iRacing também; a gravação da minha melhor volta passa a guardar esses dois canais.
+- Projetar as coordenadas no mesmo sistema do desenho da pista e alinhar com o traçado do mapa.
+- Opções: liga/desliga, cor, espessura e opacidade da linha; opcionalmente destacar os pontos de freio e de retomada do acelerador.
+- Pronto quando: a linha aparecer sobre a pista certa numa sessão real, alinhada ao traçado do mapa, para uma volta gravada e para uma importada do Garage 61.
+
+### 14. (Opcional) Monitor de stream
 
 - Painel simples com status da sessão, FPS e qualidade de rede do iRacing, para quem transmite.
 - Escopo a definir com o Fernando antes de implementar.
