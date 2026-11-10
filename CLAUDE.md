@@ -106,7 +106,16 @@ perfis, servidor web para OBS (`localhost:3000/dashboard`), temas, atalhos de te
 - Tema de cores laranja, preto e dourado como opção nas configurações de aparência.
 - Pronto quando: o tema for aplicado em todos os widgets.
 
-### 12. (Opcional) Monitor de stream
+### 12. Integração com o Garage 61 (API oficial)
+
+- Autenticação por Personal Access Token do Garage 61. O token fica salvo só localmente, nas configurações do app; nunca vai para o repositório, logs ou exports de dashboard.
+- Ao entrar numa sessão, identificar pista e carro e buscar a volta de referência no Garage 61.
+- Regra de prioridade configurável entre: volta do professor (via time no Garage 61), recorde da pista ou minha melhor volta.
+- Baixar a telemetria em CSV, converter para o formato de referência do coach e manter cache local, para funcionar offline.
+- Substitui a importação manual de referências; a importação de `.ibt` continua disponível como alternativa.
+- Pronto quando (sugestão, a confirmar com o Fernando): numa sessão real, a referência do Garage 61 for baixada e usada pelo coach sem nenhuma importação manual, respeitando a prioridade escolhida, e continuar disponível offline a partir do cache.
+
+### 13. (Opcional) Monitor de stream
 
 - Painel simples com status da sessão, FPS e qualidade de rede do iRacing, para quem transmite.
 - Escopo a definir com o Fernando antes de implementar.
