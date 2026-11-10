@@ -13,6 +13,8 @@ import { SessionVisibility } from '../components/SessionVisibility';
 import { TabButton } from '../components/TabButton';
 import { SettingProps, settingPropFor } from '../components/SettingProp';
 import { BrakingCoachCorners } from './BrakingCoachCorners';
+import { SettingActionButton } from '../components/SettingActionButton';
+import { coachSay } from '../../BrakingCoach/coachSpeech';
 
 const SETTING_ID = 'brakingcoach';
 const SettingProp = settingPropFor(SETTING_ID);
@@ -119,6 +121,33 @@ export const BrakingCoachSettings = () => {
                       max={100}
                       step={5}
                       onChange={(v) => handleConfigChange({ volume: v / 100 })}
+                    />
+                  </SettingsSection>
+                  <SettingsSection title={t('Voice')}>
+                    <SettingProp path="sayRef" />
+                    <SettingProp path="voiceRate" />
+                    <SettingSliderRow
+                      title={t('Voice Volume')}
+                      description={t('Volume of the spoken reference points')}
+                      value={Math.round(settings.config.voiceVolume * 100)}
+                      units="%"
+                      min={0}
+                      max={100}
+                      step={5}
+                      onChange={(v) =>
+                        handleConfigChange({ voiceVolume: v / 100 })
+                      }
+                    />
+                    <SettingActionButton
+                      label="Test the voice"
+                      title="Test"
+                      description="Says a sample reference point with these settings"
+                      onClick={() =>
+                        coachSay(t('Brake at the 100 board'), {
+                          rate: settings.config.voiceRate,
+                          volume: settings.config.voiceVolume,
+                        })
+                      }
                     />
                   </SettingsSection>
                 </>

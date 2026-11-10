@@ -2702,4 +2702,20 @@ export const ptBR: Readonly<Record<string, string>> = {
   'Clear my marks': 'Apagar minhas marcas',
   'Remove your brake points, minimums and gears for this car on this track? The tips stay.':
     'Apagar seus pontos de freio, mínimas e marchas deste carro nesta pista? As dicas continuam.',
+  // Braking coach — voice
+  'Speak Reference Points': 'Falar os pontos de referência',
+  'A voice reads out the reference point you wrote for a corner (in the Corners tab), timed to finish just before the brake point. Uses the voices installed in Windows.':
+    'Uma voz lê o ponto de referência que você escreveu para a curva (na aba Curvas), a tempo de terminar logo antes do ponto de freio. Usa as vozes instaladas no Windows.',
+  'Voice Speed': 'Velocidade da voz',
+  'From -10 (slow) to 10 (fast); 0 is the normal speed':
+    'De -10 (devagar) a 10 (rápido); 0 é a velocidade normal',
+  Voice: 'Voz',
+  'Voice Volume': 'Volume da voz',
+  'Volume of the spoken reference points':
+    'Volume dos pontos de referência falados',
+  'Test the voice': 'Testar a voz',
+  Test: 'Teste',
+  'Says a sample reference point with these settings':
+    'Fala um ponto de referência de exemplo com estas configurações',
+  'Brake at the 100 board': 'Freie na placa de 100',
 };

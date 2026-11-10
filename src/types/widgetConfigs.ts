@@ -1524,6 +1524,12 @@ export interface BrakingCoachConfig {
    * it and your own best lap, as Dex's "mix" mode.
    */
   blend: boolean;
+  /** Read out each corner's spoken reference point before its brake point. */
+  sayRef: boolean;
+  /** Voice speed, -10 (slow) to 10 (fast), like the Windows voice. */
+  voiceRate: number;
+  /** 0..1 */
+  voiceVolume: number;
   background: { opacity: number };
   showOnlyWhenOnTrack: boolean;
   sessionVisibility: SessionVisibilitySettings;

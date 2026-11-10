@@ -16,6 +16,8 @@ import {
 } from '@irdashies/utils/brakeCueAudio';
 import { CoachTracker } from '../engine/coachTracker';
 import { markAt, TurnsRecorder } from '../engine/coachMarks';
+import { sayDue } from '../engine/coachVoice';
+import { coachSay, coachSpeaking } from '../coachSpeech';
 import type { CoachBeep, CoachState } from '../engine/types';
 import { useCoachSetup, type CoachSetup } from './useCoachSetup';
 
@@ -44,6 +46,12 @@ export interface BrakingCoachOptions {
   feedback: boolean;
   /** With an imported reference, coach half-way between it and your best. */
   blend: boolean;
+  /** Read out the corners' spoken reference points. */
+  sayRef: boolean;
+  /** -10..10 */
+  voiceRate: number;
+  /** 0..1 */
+  voiceVolume: number;
   /**
    * The coach is on screen for this session. When not (a race with "practice
    * only"), it keeps following the corners but stays silent, like the
@@ -99,6 +107,8 @@ export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
   }
   const turns = useRef(new TurnsRecorder());
   const lastPct = useRef(-1);
+  /** SessionTime each corner's reference point was last read out. */
+  const said = useRef(new Map<number, number>());
   const [state, setState] = useState<CoachState>(() => ({
     phase: corners.length ? 'idle' : 'noref',
     beeps: [],
@@ -122,6 +132,7 @@ export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
 
   useEffect(() => {
     tracker.current?.setCorners(corners, timing, lengthM);
+    said.current.clear();
     setState({ phase: corners.length ? 'idle' : 'noref', beeps: [] });
   }, [corners, timing, lengthM]);
 
@@ -197,6 +208,25 @@ export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
 
       const st = engine.feed(sample, now);
       const o = opts.current;
+      if (o.sayRef && o.active && sample.ok && !coachSpeaking()) {
+        const s = live.current;
+        const due = sayDue(
+          s.corners,
+          sample.pct,
+          sample.sessionTime,
+          sample.speedKph,
+          s.timing,
+          s.lengthM ?? 0,
+          o.voiceRate,
+          said.current
+        );
+        if (
+          due &&
+          coachSay(due.text, { rate: o.voiceRate, volume: o.voiceVolume })
+        ) {
+          said.current.set(due.n, sample.sessionTime);
+        }
+      }
       if (st.beeps.length && o.active && o.level === 'full' && o.volume > 0) {
         for (const b of st.beeps) playCueTone(COACH_TONES[b], o.volume);
       }

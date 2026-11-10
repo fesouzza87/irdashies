@@ -20,6 +20,9 @@ export default defineWidgetManifest({
     feedback: true,
     hideIdle: true,
     blend: true,
+    sayRef: true,
+    voiceRate: 0,
+    voiceVolume: 1,
     background: { opacity: 0.85 },
     showOnlyWhenOnTrack: true,
     // Like the original "practice only": quiet in races and qualifying.
@@ -96,6 +99,20 @@ export default defineWidgetManifest({
       label: 'Half-way with My Best Lap',
       description:
         'With an imported reference lap (.ibt or Garage 61), put each brake point, minimum and throttle point half-way between that lap and your own best, so you close the gap step by step. Off: follow the imported lap as it is.',
+    },
+    sayRef: {
+      type: 'boolean',
+      label: 'Speak Reference Points',
+      description:
+        'A voice reads out the reference point you wrote for a corner (in the Corners tab), timed to finish just before the brake point. Uses the voices installed in Windows.',
+    },
+    voiceRate: {
+      type: 'number',
+      label: 'Voice Speed',
+      description: 'From -10 (slow) to 10 (fast); 0 is the normal speed',
+      min: -10,
+      max: 10,
+      step: 1,
     },
     showOnlyWhenOnTrack: {
       type: 'boolean',
