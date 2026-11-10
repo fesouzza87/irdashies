@@ -29,38 +29,87 @@ perfis, servidor web para OBS (`localhost:3000/dashboard`), temas, atalhos de te
 
 ## Backlog — o que adicionar (por prioridade)
 
-### 1. Interface em português (PT-BR)
+### Concluído — Interface em português (PT-BR)
 
 - i18n nas Settings e nos rótulos dos widgets, com inglês como fallback.
 - Pronto quando: as Settings estiverem todas em PT-BR e o idioma puder ser trocado sem reiniciar.
+- Status: implementado no branch `traducao-ptbr` e mesclado no `main`; falta a validação no iRacing real (Test Drive).
 
-### 2. Atalhos nos botões do volante (equivalente ao `gamepad.node` do Kapps)
+### 1. Coach de Frenagem (recriação do coach do Dex Overlay)
+
+- Antes: "(Futuro) Coach de frenagem do Dex Overlay — Avaliar portar o coach de frenagem como widget. Discutir antes de começar." Decisão tomada: recriar como widget.
+- Referência de comportamento: `C:\Users\Fernando\Downloads\dex-overlay-v1.22.0\dex-overlay` (`coach.py`, `web/coach.html`, `coach_notes/`).
+- Reimplementar em TypeScript como widget do irDashies (telemetria pelo SDK já existente, interface em React), com todos os textos em PT-BR via i18n.
+- Fora do escopo: a parte de aulas.
+- Story no Storybook e configurações na tela de Settings, como toda feature nova.
+- Pronto quando: funcionar numa sessão real com o mesmo comportamento do original.
+
+### 2. Modo desempenho
+
+- Taxa de atualização configurável por widget, com padrão baixo para Standings, Relative e mapa da pista.
+- Pausar o processamento e a renderização de widgets ocultos.
+- Mostrar o consumo de CPU e memória do app nas configurações.
+- Pronto quando: o uso de CPU com o perfil "Corrida" cair de forma mensurável em relação ao padrão (medir antes e depois na mesma sessão ou replay).
+
+### 3. Atalhos nos botões do volante (equivalente ao `gamepad.node` do Kapps)
 
 - Ler botões de controladores DirectInput/XInput (G29) no processo principal.
 - Ações mapeáveis: mostrar/ocultar overlays, modo de edição, próximo perfil, reset do histórico de combustível, ligar/desligar widget específico.
 - Tela de bindings com "aperte o botão" para capturar, convivendo com os atalhos de teclado já existentes.
 - Pronto quando: um botão do G29 alternar a visibilidade dos overlays com o iRacing em foco.
 
-### 3. Calculadora de combustível de planejamento (janela própria, como o "Fuel Calc" do Kapps)
+### 4. Análise de frenagem
+
+- Por curva: pico de pressão no freio, tempo até o pico, formato da soltura (trail braking) e travamentos de roda.
+- Ao fim da volta: comparação com a melhor volta, mostrando em quais curvas freou cedo ou tarde.
+- Pronto quando: exibir os dados de cada curva de uma volta real.
+
+### 5. Volta de referência
+
+- Importar a volta de referência de outro piloto (o professor).
+- Mostrar o delta ao vivo contra ela, com opção de alternar entre a melhor volta pessoal e a referência.
+- Pronto quando: o delta bater com a diferença real no fim da volta.
+
+### 6. Notas por pista
+
+- Usar os `coach_notes` do Dex Overlay como anotações por curva no Track Map e no widget de nomes de curva (Corner Names).
+- Exibir a nota ao se aproximar da curva.
+- Notas editáveis nas configurações.
+- Pronto quando: as notas aparecerem na curva certa numa sessão real.
+
+### 7. Calculadora de combustível de planejamento (janela própria, como o "Fuel Calc" do Kapps)
 
 - Janela independente, que funciona fora da sessão: duração da corrida (tempo ou voltas), tempo de volta, consumo por volta, tamanho do tanque e margem.
 - Saída: combustível total, número de paradas, combustível por stint e volta ideal de parada.
 - Botão "puxar da sessão atual" para preencher consumo e tempo de volta pela telemetria.
 - Pronto quando: os resultados baterem com um cálculo manual em 3 cenários (corrida curta, corrida por tempo e endurance com 2+ paradas).
 
-### 4. Perfis prontos
+### 8. Resumo pós-sessão
+
+- Ao fim de cada sessão, salvar: voltas, consistência (desvio padrão dos tempos), incidentes, consumo de combustível e variação de iRating.
+- Tela de histórico por pista e carro.
+- Pronto quando: três sessões aparecerem no histórico com os dados corretos.
+
+### 9. Alertas de voz em PT-BR
+
+- Alertas: carro ao lado, combustível baixo (voltas restantes), janela de pit aberta e bandeiras.
+- Cada alerta com liga/desliga e volume próprios.
+- Pronto quando: os alertas tocarem numa sessão real sem atraso perceptível.
+
+### 10. Perfis prontos
 
 - "Corrida", "Treino/Quali" e "Stream", cada um com um conjunto de widgets e posições.
 - Pronto quando: os três perfis vierem pré-instalados e puderem ser alternados pelo atalho do volante.
 
-### 5. (Opcional) Monitor de stream
+### 11. Tema Dex Racing
+
+- Tema de cores laranja, preto e dourado como opção nas configurações de aparência.
+- Pronto quando: o tema for aplicado em todos os widgets.
+
+### 12. (Opcional) Monitor de stream
 
 - Painel simples com status da sessão, FPS e qualidade de rede do iRacing, para quem transmite.
 - Escopo a definir com o Fernando antes de implementar.
-
-### 6. (Futuro) Coach de frenagem do Dex Overlay
-
-- Avaliar portar o coach de frenagem como widget. Discutir antes de começar.
 
 ## Fluxo de trabalho
 
