@@ -2718,4 +2718,10 @@ export const ptBR: Readonly<Record<string, string>> = {
   'Says a sample reference point with these settings':
     'Fala um ponto de referência de exemplo com estas configurações',
   'Brake at the 100 board': 'Freie na placa de 100',
+  // Braking coach — audio device and Windows voice
+  'Which Windows playback device the beeps and the voice use. Default follows whatever Windows is set to. With Lap Trace in the same window, they share one device.':
+    'Em qual dispositivo de áudio do Windows tocam os bipes e a voz. Padrão segue o que estiver configurado no Windows. Com o Lap Trace na mesma janela, os dois usam o mesmo dispositivo.',
+  'Which Windows voice reads the reference points. Automatic picks one in the app language (for Brazilian Portuguese, Microsoft Maria when installed).':
+    'Qual voz do Windows lê os pontos de referência. Automática escolhe uma no idioma do app (para português do Brasil, a Microsoft Maria, se estiver instalada).',
+  'Automatic (app language)': 'Automática (idioma do app)',
 };

@@ -5,6 +5,7 @@ import {
   type Session,
 } from '@irdashies/types';
 import logger from '../logger';
+import { sapiVoice } from '../coach/sapiVoice';
 import type { OverlayManager } from '../overlayManager';
 import {
   clearCoachMarks,
@@ -121,6 +122,27 @@ export const setupCoachBridge = (overlayManager?: OverlayManager) => {
     }
     if (await saveCoachTurns(trackKey, turns)) changed(trackKey);
   });
+
+  ipcMain.handle(
+    'coach:synthesize',
+    async (_, text: unknown, voice: unknown, lang: unknown, rate: unknown) => {
+      if (
+        typeof text !== 'string' ||
+        !text.trim() ||
+        text.length > 400 ||
+        typeof voice !== 'string' ||
+        voice.length > 200 ||
+        typeof lang !== 'string' ||
+        typeof rate !== 'number' ||
+        !Number.isFinite(rate)
+      ) {
+        throw new TypeError('Invalid payload for coach:synthesize');
+      }
+      return sapiVoice.synthesize(text, voice, lang, rate);
+    }
+  );
+
+  ipcMain.handle('coach:listVoices', () => sapiVoice.listVoices());
 
   ipcMain.handle('coach:getCurrentSession', () =>
     coachSessionFromSession(

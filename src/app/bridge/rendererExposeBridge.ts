@@ -448,6 +448,9 @@ export function exposeBridge() {
       ipcRenderer.on('coach:mark', handler);
       return () => ipcRenderer.removeListener('coach:mark', handler);
     },
+    synthesize: (text: string, voice: string, lang: string, rate: number) =>
+      ipcRenderer.invoke('coach:synthesize', text, voice, lang, rate),
+    listVoices: () => ipcRenderer.invoke('coach:listVoices'),
   } satisfies CoachBridge);
 
   contextBridge.exposeInMainWorld('lapTraceBridge', {

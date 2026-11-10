@@ -12,12 +12,13 @@ import logger from '@irdashies/utils/logger';
 import {
   playCueTone,
   primeBrakeCueAudio,
+  setBrakeCueOutputDevice,
   type CueTone,
 } from '@irdashies/utils/brakeCueAudio';
 import { CoachTracker } from '../engine/coachTracker';
 import { markAt, TurnsRecorder } from '../engine/coachMarks';
 import { sayDue } from '../engine/coachVoice';
-import { coachSay, coachSpeaking } from '../coachSpeech';
+import { coachSay, coachSpeaking, prepareCoachVoice } from '../coachSpeech';
 import type { CoachBeep, CoachState } from '../engine/types';
 import { useCoachSetup, type CoachSetup } from './useCoachSetup';
 
@@ -52,6 +53,10 @@ export interface BrakingCoachOptions {
   voiceRate: number;
   /** 0..1 */
   voiceVolume: number;
+  /** Windows voice; '' = one in the app language. */
+  voiceName: string;
+  /** Playback device for beeps and voice. */
+  outputDeviceId: string;
   /**
    * The coach is on screen for this session. When not (a race with "practice
    * only"), it keeps following the corners but stays silent, like the
@@ -149,10 +154,30 @@ export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
     options.level === 'full' &&
     options.beep !== 'off' &&
     options.volume > 0;
+  const voiceOn = options.active && options.sayRef && options.voiceVolume > 0;
   useEffect(() => {
-    // Open the audio device ahead of the first beep.
-    if (beepsOn) primeBrakeCueAudio();
-  }, [beepsOn]);
+    // Route first, then open the device ahead of the first beep or call.
+    setBrakeCueOutputDevice(options.outputDeviceId);
+    if (beepsOn || voiceOn) primeBrakeCueAudio();
+  }, [beepsOn, voiceOn, options.outputDeviceId]);
+
+  // Every corner's call is rendered ahead of time, so it plays the instant
+  // it is due.
+  const sayTexts = corners
+    .filter((c) => !c.hidden && c.say)
+    .map((c) => c.say)
+    .join('\n');
+  useEffect(() => {
+    if (!voiceOn) return;
+    for (const text of sayTexts.split('\n')) {
+      if (text) {
+        void prepareCoachVoice(text, {
+          voice: options.voiceName,
+          rate: options.voiceRate,
+        });
+      }
+    }
+  }, [voiceOn, sayTexts, options.voiceName, options.voiceRate]);
 
   useEffect(() => {
     const bridge = window.coachBridge;
@@ -222,7 +247,11 @@ export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
         );
         if (
           due &&
-          coachSay(due.text, { rate: o.voiceRate, volume: o.voiceVolume })
+          coachSay(due.text, {
+            voice: o.voiceName,
+            rate: o.voiceRate,
+            volume: o.voiceVolume,
+          })
         ) {
           said.current.set(due.n, sample.sessionTime);
         }

@@ -28,6 +28,8 @@ export const BrakingCoach = (props: BrakingCoachProps) => {
     sayRef: config.sayRef,
     voiceRate: config.voiceRate,
     voiceVolume: config.voiceVolume,
+    voiceName: config.voiceName,
+    outputDeviceId: config.outputDeviceId,
     active: shown,
   });
 

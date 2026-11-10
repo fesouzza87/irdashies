@@ -1530,6 +1530,10 @@ export interface BrakingCoachConfig {
   voiceRate: number;
   /** 0..1 */
   voiceVolume: number;
+  /** Windows voice name; '' picks one in the app language. */
+  voiceName: string;
+  /** Playback device for the beeps and the voice; DEFAULT_AUDIO_OUTPUT_DEVICE_ID follows Windows. */
+  outputDeviceId: string;
   background: { opacity: number };
   showOnlyWhenOnTrack: boolean;
   sessionVisibility: SessionVisibilitySettings;

@@ -50,6 +50,7 @@ import {
 } from './app/storage/referenceLaps';
 import { flushLapTracesOnShutdown } from './app/storage/lapTraces';
 import { setupCoachBridge } from './app/bridge/coachBridge';
+import { sapiVoice } from './app/coach/sapiVoice';
 import { flushPitLaneDataOnShutdown } from './app/storage/pitLaneData';
 import {
   flushGarage61SearchSessionOnShutdown,
@@ -705,6 +706,7 @@ const handleBeforeQuit = createBeforeQuitHandler({
       flushLapHistoryOnShutdown(),
       knownLocalUserIds.flush(),
       flushRadarPoleSideOverrides(),
+      sapiVoice.dispose(),
       releaseNotes?.flush(),
       flushGarage61SearchSessionOnShutdown(),
       flushStorageWritesOnShutdown(),

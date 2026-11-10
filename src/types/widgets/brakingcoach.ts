@@ -1,3 +1,4 @@
+import { DEFAULT_AUDIO_OUTPUT_DEVICE_ID } from '../lapTrace';
 import { defineWidgetManifest } from './types';
 
 export default defineWidgetManifest({
@@ -23,6 +24,8 @@ export default defineWidgetManifest({
     sayRef: true,
     voiceRate: 0,
     voiceVolume: 1,
+    voiceName: '',
+    outputDeviceId: DEFAULT_AUDIO_OUTPUT_DEVICE_ID,
     background: { opacity: 0.85 },
     showOnlyWhenOnTrack: true,
     // Like the original "practice only": quiet in races and qualifying.

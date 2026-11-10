@@ -76,6 +76,24 @@ export interface CoachBridge {
   onChanged: (callback: (trackKey: string) => void) => () => void;
   /** The "mark brake point" key binding was pressed. */
   onMark: (callback: () => void) => () => void;
+  /**
+   * The phrase spoken by a Windows voice, as a WAV file; null when there is
+   * none (not Windows, or the voice failed). `voice` '' picks one for `lang`.
+   */
+  synthesize: (
+    text: string,
+    voice: string,
+    lang: string,
+    rate: number
+  ) => Promise<Uint8Array | null>;
+  /** The Windows voices installed. */
+  listVoices: () => Promise<CoachVoiceInfo[]>;
+}
+
+export interface CoachVoiceInfo {
+  name: string;
+  /** e.g. "pt-BR" */
+  culture: string;
 }
 
 /** Dex Overlay's file names: anything but letters, digits, `.` and `-` becomes `_`. */

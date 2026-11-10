@@ -66,6 +66,9 @@ const coachBridge: CoachBridge = {
     return () => listeners.delete(cb);
   },
   onMark: () => () => undefined,
+  // No Windows voice in Storybook: the browser's voice is used.
+  synthesize: async () => null,
+  listVoices: async () => [],
 };
 
 const lapTraceBridge = {

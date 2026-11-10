@@ -232,6 +232,52 @@ export const playCueTone = (spec: CueTone, volume: number): void => {
   }
 };
 
+/** Decodes a sound file (a spoken phrase) for playCueBuffer; null on failure. */
+export const decodeCueAudio = async (
+  bytes: Uint8Array
+): Promise<AudioBuffer | null> => {
+  const ctx = ensureContext();
+  if (!ctx) return null;
+  try {
+    // decodeAudioData takes (and detaches) its own ArrayBuffer.
+    const copy = bytes.slice().buffer;
+    return await ctx.decodeAudioData(copy);
+  } catch (error) {
+    logger.warn('[LapTrace] Could not decode a sound', error);
+    return null;
+  }
+};
+
+/**
+ * Plays a decoded sound on the shared context, so on the chosen output
+ * device. Not capped like the tones: a voice is meant to be heard at the
+ * volume set. Never throws.
+ */
+export const playCueBuffer = (buffer: AudioBuffer, volume: number): void => {
+  const level = clampVolume(volume);
+  const ctx = ensureContext();
+  if (!ctx || level <= 0) return;
+  if (ctx.state !== 'running') void ctx.resume();
+  try {
+    const source = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    source.buffer = buffer;
+    gain.gain.value = level;
+    source.connect(gain);
+    gain.connect(ctx.destination);
+    source.onended = () => {
+      source.disconnect();
+      gain.disconnect();
+    };
+    source.start();
+  } catch (error) {
+    if (!warnedFailed) {
+      warnedFailed = true;
+      logger.warn('[LapTrace] Failed to play a sound', error);
+    }
+  }
+};
+
 /** Testing helper: drop the context so each spec starts clean. */
 export const __resetBrakeCueAudioForTests = (): void => {
   context = null;
