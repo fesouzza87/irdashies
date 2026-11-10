@@ -138,7 +138,7 @@ function renderPreview(config: WidgetPreviewConfig, session?: Session) {
             <ReferenceStoreProvider bridge={channels.bridge} />
             <SessionTimingUpdater soloWidgetType={type} />
             <SectorTimingUpdater enabled={['map', 'flatmap'].includes(type)} />
-            {type === 'laptrace' && (
+            {(type === 'laptrace' || type === 'brakingcoach') && (
               <LapTraceRecorder
                 config={widget.config as unknown as LapTraceConfig}
               />

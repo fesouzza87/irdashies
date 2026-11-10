@@ -39,15 +39,7 @@ const RELEASE_SEC = 0.05;
  */
 const SILENCE = 0.0001;
 
-interface CueSpec {
-  frequency: number;
-  type: OscillatorType;
-  durationSec: number;
-  /** Relative level, before the master gain. */
-  peak: number;
-}
-
-const CUES: Record<BrakeCueSound, CueSpec> = {
+const CUES: Record<BrakeCueSound, CueTone> = {
   count3: { frequency: 880, type: 'sine', durationSec: 0.07, peak: 1 },
   count2: { frequency: 880, type: 'sine', durationSec: 0.07, peak: 1 },
   count1: { frequency: 880, type: 'sine', durationSec: 0.07, peak: 1 },
@@ -169,6 +161,24 @@ export const playBrakeCue = (
   volume: number,
   cues?: LapTraceSound
 ): void => {
+  // Fall back to the built-in tones when the caller passes no config.
+  playCueTone(cues?.[sound] ?? CUES[sound], volume);
+};
+
+/** One synthesised tone, for cues that are not part of the Lap Trace countdown. */
+export interface CueTone {
+  frequency: number;
+  type: OscillatorType;
+  durationSec: number;
+  /** Relative level, 0..1, before the volume. */
+  peak: number;
+}
+
+/**
+ * Play one tone on the shared context (and output device). Never throws, like
+ * playBrakeCue.
+ */
+export const playCueTone = (spec: CueTone, volume: number): void => {
   const level = clampVolume(volume);
   if (level <= 0) return;
 
@@ -189,8 +199,6 @@ export const playBrakeCue = (
   }
 
   try {
-    // Fall back to the built-in tones when the caller passes no config.
-    const spec = cues?.[sound] ?? CUES[sound];
     master.gain.value = level * MASTER_HEADROOM;
 
     const oscillator = ctx.createOscillator();

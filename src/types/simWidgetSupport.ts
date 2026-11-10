@@ -69,6 +69,8 @@ export const LMU_SUPPORTED_WIDGETS: readonly string[] = [
 /** Everything else, hidden while LMU is the running sim. */
 export const LMU_DISABLED_WIDGETS: readonly string[] = [
   'blindspotmonitor',
+  // Not yet checked under LMU.
+  'brakingcoach',
   // Broadcast reads iRacing's standings, timing and race control; not yet
   // checked against LMU's data.
   'broadcast',

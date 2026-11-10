@@ -46,6 +46,42 @@ describe('LapTraceUpdater', () => {
     expect(useLapTraceRecorder).not.toHaveBeenCalled();
   });
 
+  it('runs the recorder for the braking coach, which reads the same lap', () => {
+    mockWidgets([
+      {
+        id: 'brakingcoach',
+        enabled: true,
+        layout,
+        config: { referenceSource: 'garage61' },
+      },
+    ]);
+
+    render(<LapTraceUpdater />);
+
+    expect(useLapTraceRecorder).toHaveBeenCalledWith('garage61');
+  });
+
+  it("follows Lap Trace's reference when both widgets share a display", () => {
+    mockWidgets([
+      {
+        id: 'brakingcoach',
+        enabled: true,
+        layout,
+        config: { referenceSource: 'garage61' },
+      },
+      {
+        id: 'laptrace',
+        enabled: true,
+        layout,
+        config: { referenceSource: 'manual' },
+      },
+    ]);
+
+    render(<LapTraceUpdater />);
+
+    expect(useLapTraceRecorder).toHaveBeenCalledWith('manual');
+  });
+
   it('runs the recorder in the browser view, unscoped by display', () => {
     // The OBS/browser source has no display bounds of its own, and nothing
     // else there mounts the recorder — without it the widget draws no trace

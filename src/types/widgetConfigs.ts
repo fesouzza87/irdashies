@@ -1493,6 +1493,37 @@ export interface InformationBarConfig extends SessionBarConfig {
   sessionVisibility: SessionVisibilitySettings;
 }
 
+export type BrakingCoachLevel = 'full' | 'quiet' | 'point' | 'summary';
+export type BrakingCoachBeep = 'off' | 'brake' | 'all';
+
+/**
+ * Braking coach (a port of the Dex Overlay coach): warns before each brake
+ * point of the reference lap, calls the brake and the throttle, and sums up
+ * each corner against the reference on the exit.
+ */
+export interface BrakingCoachConfig {
+  /** Which saved lap the corners come from (shared with Lap Trace). */
+  referenceSource: LapTraceSource;
+  /**
+   * How much help: 'full' (everything, with beeps), 'quiet' (no beeps),
+   * 'point' (only the brake/throttle calls and the summary), 'summary' (only
+   * the corner summary).
+   */
+  level: BrakingCoachLevel;
+  beep: BrakingCoachBeep;
+  /** 0..1 */
+  volume: number;
+  /** Seconds before the brake point the warning appears (2 to 6). */
+  lookS: number;
+  /** Summary of each corner against the reference, on the exit. */
+  feedback: boolean;
+  /** Hide the panel on the straights instead of showing the next corner. */
+  hideIdle: boolean;
+  background: { opacity: number };
+  showOnlyWhenOnTrack: boolean;
+  sessionVisibility: SessionVisibilitySettings;
+}
+
 export interface WidgetConfigMap {
   standings: StandingsConfig;
   relative: RelativeConfig;
@@ -1523,6 +1554,7 @@ export interface WidgetConfigMap {
   cornername: CornerNameOverlayConfig;
   battle: BattleConfig;
   laptrace: LapTraceConfig;
+  brakingcoach: BrakingCoachConfig;
   gantry: GantryConfig;
   broadcast: BroadcastConfig;
   broadcastticker: BroadcastTickerConfig;
@@ -1645,3 +1677,4 @@ export type CornerNameWidgetSettings =
   BaseWidgetSettings<CornerNameOverlayConfig>;
 export type BattleWidgetSettings = BaseWidgetSettings<BattleConfig>;
 export type LapTraceWidgetSettings = BaseWidgetSettings<LapTraceConfig>;
+export type BrakingCoachWidgetSettings = BaseWidgetSettings<BrakingCoachConfig>;

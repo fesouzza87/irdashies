@@ -29,6 +29,9 @@ const LapTraceUpdater = lazy(() =>
   }))
 );
 
+/** Widgets that read the lap-trace reference lap, so their window records it. */
+const RECORDING_WIDGETS = new Set(['laptrace', 'brakingcoach']);
+
 const PushToPassUpdater = () => {
   usePushToPassStoreUpdater(true);
   return null;
@@ -90,7 +93,7 @@ const IndividualWidgetContent = () => {
   return (
     <>
       {/* Recording survives hide hotkeys and is owned by this widget's window. */}
-      {widget && (widget.type ?? widget.id) === 'laptrace' && (
+      {widget && RECORDING_WIDGETS.has(widget.type ?? widget.id) && (
         <Suspense fallback={null}>
           <LapTraceUpdater />
         </Suspense>

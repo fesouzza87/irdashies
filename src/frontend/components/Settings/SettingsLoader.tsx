@@ -38,6 +38,7 @@ import { CarSystemsSettings } from './sections/CarSystemsSettings';
 import { HeartRateSettings } from './sections/HeartRateSettings';
 import { CornerNameSettings } from './sections/CornerNameSettings';
 import { LapTraceSettings } from './sections/LapTraceSettings';
+import { BrakingCoachSettings } from './sections/BrakingCoachSettings';
 import { BattleSettings } from './sections/BattleSettings';
 import { BroadcastSettingsPage } from './sections/BroadcastGroupSettings';
 import { GantrySettings } from './sections/GantrySettings';
@@ -78,6 +79,7 @@ export const WIDGET_SETTINGS: Record<
   heartrate: HeartRateSettings,
   cornername: CornerNameSettings,
   laptrace: LapTraceSettings,
+  brakingcoach: BrakingCoachSettings,
   battle: BattleSettings,
   // The broadcast widgets share one page, with a tab per widget.
   broadcast: BroadcastSettingsPage,

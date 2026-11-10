@@ -31,9 +31,13 @@ export const LapTraceUpdater = ({ browser = false }: { browser?: boolean }) => {
   const widgets = useWidgetsForThisDisplay(browser);
 
   const referenceSource = useMemo<LapTraceSource | null>(() => {
-    const widget = widgets.find((w) => w.id === 'laptrace');
+    // The braking coach coaches from the same reference lap. With both on this
+    // display there is one store, so Lap Trace's choice of lap wins.
+    const widget =
+      widgets.find((w) => w.id === 'laptrace') ??
+      widgets.find((w) => w.id === 'brakingcoach');
     if (!widget) return RECORDER_OFF;
-    const config = widget.config as LapTraceConfig | undefined;
+    const config = widget.config as Partial<LapTraceConfig> | undefined;
     return config?.referenceSource ?? 'best';
   }, [widgets]);
 

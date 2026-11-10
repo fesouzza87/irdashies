@@ -2600,4 +2600,75 @@ export const ptBR: Readonly<Record<string, string>> = {
   'Group {number}: {widgets}': 'Grupo {number}: {widgets}',
   '{widget} (group {number})': '{widget} (grupo {number})',
   '{widget} (available)': '{widget} (disponível)',
+  // Braking coach (texts from the Dex Overlay coach)
+  'Braking Coach': 'Coach de frenagem',
+  'Which saved lap the corners come from. Your best lap is recorded automatically from your first clean lap on each track and car. When Lap Trace is on the same screen, its choice is used.':
+    'De qual volta salva vêm as curvas. A sua melhor volta é gravada automaticamente a partir da primeira volta limpa em cada pista e carro. Com o Lap Trace na mesma tela, vale a escolha dele.',
+  'Help Level': 'Nível de ajuda',
+  'Take the warnings away as you learn the track. Full: everything, with beeps. Quiet: everything, no beeps. Brake points only: just the brake and throttle calls and the summary. Summary only: just how each corner went.':
+    'Vá tirando os avisos conforme aprende a pista. Completo: tudo, com bipes. Silencioso: tudo, sem bipes. Só pontos de freio: só os avisos de frear e acelerar e o resumo. Só o resumo: só como foi cada curva.',
+  'Quiet (no beeps)': 'Silencioso (sem bipes)',
+  'Brake points only': 'Só pontos de freio',
+  'Summary only': 'Só o resumo',
+  Beeps: 'Bipes',
+  'Three short beeps counting down to the brake point, a long one at the brake point and, with "All", a high one when it is time to get back on the throttle. Only at the Full help level.':
+    'Três bipes curtos na contagem até o ponto de freio, um longo no ponto de freio e, com "Todos", um agudo na hora de voltar ao acelerador. Só no nível de ajuda Completo.',
+  'Brake points': 'Pontos de freio',
+  'All (brake and throttle)': 'Todos (freio e acelerador)',
+  'Warning Time': 'Antecedência do aviso',
+  'How many seconds before the brake point the warning appears':
+    'Quantos segundos antes do ponto de freio o aviso aparece',
+  'Corner Summary': 'Resumo da curva',
+  'On the exit of each corner, show the time gained or lost against the reference, where you braked, your minimum speed and a tip':
+    'Na saída de cada curva, mostra o tempo ganho ou perdido contra a referência, onde você freou, a sua velocidade mínima e uma dica',
+  'Hide on Straights': 'Esconder nas retas',
+  'Hide the panel between corners instead of showing the next corner':
+    'Esconde o painel entre as curvas em vez de mostrar a próxima curva',
+  'If enabled, the coach will only be shown when driving':
+    'Se ativado, o coach só aparece quando você estiver pilotando',
+  'Warns before each brake point of your reference lap, calls the brake and the throttle, and sums up each corner on the exit. The corners come from the reference lap: your best clean lap on this track and car, or a lap imported in the Lap Trace settings. Based on the Dex Overlay coach.':
+    'Avisa antes de cada ponto de freio da sua volta de referência, chama a hora de frear e de acelerar e resume cada curva na saída. As curvas vêm da volta de referência: a sua melhor volta limpa nesta pista e carro, ou uma volta importada nas configurações do Lap Trace. Baseado no coach do Dex Overlay.',
+  Coach: 'Coach',
+  Sound: 'Som',
+  Volume: 'Volume',
+  'Volume of the coach beeps': 'Volume dos bipes do coach',
+  'Opacity of the panel background between calls. The brake, lift and throttle calls are always solid.':
+    'Opacidade do fundo do painel entre os avisos. Os avisos de frear, aliviar e acelerar são sempre opacos.',
+  'Better than the reference 👍': 'Melhor que a referência 👍',
+  'Brake a little earlier and carry more speed through the middle':
+    'Frear um pouco antes e levar mais velocidade no meio da curva',
+  'Too fast in, late on the exit: brake earlier':
+    'Entrou rápido demais e atrasou a saída: frear mais cedo',
+  'Braked too early: you can brake later':
+    'Freou cedo demais: dá para frear mais tarde',
+  'Carry more speed through the middle (release the brake sooner)':
+    'Levar mais velocidade no meio da curva (soltar o freio antes)',
+  'Get back on the throttle sooner': 'Voltar ao acelerador mais cedo',
+  'Same as the reference': 'Igual à referência',
+  'Close to the reference': 'Perto da referência',
+  'T{label}': 'C{label}',
+  right: 'direita',
+  left: 'esquerda',
+  ' then ': ' e ',
+  'Target min': 'Mín. alvo',
+  'Last time': 'Última vez',
+  'lift in': 'alivie em',
+  'brake in': 'freie em',
+  'brake to {pk} in': 'freie a {pk} em',
+  'braked {m} m later': 'freou {m} m mais tarde',
+  'braked {m} m earlier': 'freou {m} m mais cedo',
+  'min {speed} ({delta})': 'mín. {speed} ({delta})',
+  'throttle {m} m later': 'acelerou {m} m mais tarde',
+  'throttle {m} m earlier': 'acelerou {m} m mais cedo',
+  'Coach: recording the reference': 'Coach: gravando a referência',
+  'Complete one clean lap (or import a reference lap in the Lap Trace settings).':
+    'Complete uma volta limpa (ou importe uma volta de referência nas configurações do Lap Trace).',
+  'your mark': 'sua marca',
+  BRAKE: 'FREIE',
+  LIFT: 'ALIVIE',
+  'to {pk}%': 'a {pk}%',
+  'throttle in': 'acelere em',
+  THROTTLE: 'ACELERE',
+  Next: 'Próxima',
+  'Coach ready': 'Coach pronto',
 };
