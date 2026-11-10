@@ -2,7 +2,7 @@
 
 ## Dex Overlay — coach de frenagem
 
-O motor do Coach de frenagem (`src/frontend/components/BrakingCoach/engine/`) é uma tradução para TypeScript do coach de frenagem do Dex Overlay (`coach.py`). As dicas por pista embutidas vêm de `coach_notes/` do mesmo projeto.
+O motor do Coach de frenagem (`src/frontend/components/BrakingCoach/engine/`) é uma tradução para TypeScript do coach de frenagem do Dex Overlay (`coach.py`), e o painel (`BrakingCoachView.tsx`) segue o `web/coach.html`. As dicas por pista embutidas (`src/app/coach/defaultNotes/`) vêm de `coach_notes/` do mesmo projeto.
 
 ```
 MIT License

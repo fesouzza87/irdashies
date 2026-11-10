@@ -1,0 +1,48 @@
+{
+  "v": 1,
+  "track": "Summit Point Raceway",
+  "length_m": 3197.1,
+  "source": "Sambo iRacing — iRacing BMW M2 Summit Point Guide 1:18.3 (open setup)",
+  "corners": [
+    {
+      "p": 0.17735,
+      "label": "1",
+      "note": "Freie logo após os 5 cones da direita, ~45–50%, aliviando até a 3ª (trail braking). Acelere perto da zebra, sem subir nela."
+    },
+    {
+      "p": 0.34625,
+      "label": "2",
+      "note": ""
+    },
+    {
+      "p": 0.48231,
+      "label": "3",
+      "note": "Freie ao alinhar com a via de acesso à direita: leve, ~25%, e reduza para a 4ª. Passe rente à zebra da esquerda e abra a saída sem ir para a brita."
+    },
+    {
+      "p": 0.53486,
+      "label": "4",
+      "note": "Vire ao chegar no trecho de grama à direita. Só um toque no freio para transferir peso e acelere na zebra."
+    },
+    {
+      "p": 0.57208,
+      "label": "5",
+      "note": "Assim que alinhar o volante, freie ~50%, 3ª marcha, e ataque de leve a zebra 3D de dentro."
+    },
+    {
+      "p": 0.69313,
+      "label": "6",
+      "note": "Freie ~30% na abertura da parede de pneus (posto de sinalização), 3ª/4ª, e acelere aos poucos."
+    },
+    {
+      "p": 0.74005,
+      "label": "7–9",
+      "note": "Toque de leve a zebra da direita. Nas 8 e 9, só alívios de acelerador, sem freada forte. Use toda a largura da pista."
+    },
+    {
+      "p": 0.86297,
+      "label": "10",
+      "note": "Freie ao passar sob a ponte, ao lado da entrada dos pits: 30–35%, mantenha a 5ª. Acelere antes do ápice, rente à zebra sem encostar."
+    }
+  ]
+}

@@ -49,6 +49,7 @@ import {
   flushReferenceLapsOnShutdown,
 } from './app/storage/referenceLaps';
 import { flushLapTracesOnShutdown } from './app/storage/lapTraces';
+import { setupCoachBridge } from './app/bridge/coachBridge';
 import { flushPitLaneDataOnShutdown } from './app/storage/pitLaneData';
 import {
   flushGarage61SearchSessionOnShutdown,
@@ -472,6 +473,7 @@ void app.whenReady().then(async () => {
   const pitLaneBridge = setupPitLaneBridge(overlayManager, channelBus);
   setupPersonalBestLapTimesBridge();
   setupLapTraceBridge(overlayManager);
+  setupCoachBridge(overlayManager);
   setupGarage61SearchSession(dashboard);
   setupChromiumFlagsBridge();
   ipcMain.handle('widgetVisibility:getHidden', () => getHiddenWidgets());

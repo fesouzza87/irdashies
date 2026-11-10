@@ -203,6 +203,7 @@ const sampleBridge = () => {
       brake: 0,
       speed: 50,
       gear: 3,
+      steer: 0,
       brakeAbsActive: false,
       onPitRoad: false,
       isOnTrack: true,

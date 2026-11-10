@@ -77,6 +77,7 @@ const publishSample = (overrides: Partial<LapTraceSampleSnapshot> = {}) => {
     brake: 0,
     speed: 50,
     gear: 4,
+    steer: 0,
     brakeAbsActive: false,
     onPitRoad: false,
     isOnTrack: true,

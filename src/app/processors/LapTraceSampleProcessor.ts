@@ -31,6 +31,7 @@ const defaults = (): LapTraceSampleSnapshot => ({
   brake: 0,
   speed: 0,
   gear: 0,
+  steer: 0,
   brakeAbsActive: false,
   onPitRoad: false,
   isOnTrack: false,
@@ -84,6 +85,8 @@ export class LapTraceSampleProcessor implements TelemetryProcessor<LapTraceSampl
       ) || changed;
     changed = this.set('speed', numberValue(frame, 'Speed', 0)) || changed;
     changed = this.set('gear', numberValue(frame, 'Gear', 0)) || changed;
+    changed =
+      this.set('steer', numberValue(frame, 'SteeringWheelAngle', 0)) || changed;
     changed =
       this.set('brakeAbsActive', booleanValue(frame, 'BrakeABSactive')) ||
       changed;

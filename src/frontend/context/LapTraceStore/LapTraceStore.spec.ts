@@ -53,6 +53,7 @@ const sample = (frame: Frame): LapTraceSampleSnapshot => ({
   brake: frame.brake ?? 0,
   speed: frame.speed ?? 40,
   gear: frame.gear ?? 3,
+  steer: 0,
   brakeAbsActive: frame.abs ?? false,
   onPitRoad: frame.onPitRoad ?? false,
   isOnTrack: frame.onTrack ?? true,

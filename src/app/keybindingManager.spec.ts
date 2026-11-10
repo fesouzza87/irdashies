@@ -86,6 +86,12 @@ const bindingsWithBadAccelerator = (): KeybindingsMap => ({
     description: '',
     isDefault: true,
   },
+  'coach-mark': {
+    accelerator: '',
+    label: 'Braking Coach: Mark Brake Point',
+    description: '',
+    isDefault: true,
+  },
 });
 
 describe('KeybindingManager', () => {

@@ -2671,4 +2671,35 @@ export const ptBR: Readonly<Record<string, string>> = {
   THROTTLE: 'ACELERE',
   Next: 'Próxima',
   'Coach ready': 'Coach pronto',
+  // Braking coach — tips, marks and the corners table
+  'Half-way with My Best Lap': 'Meio-termo com a minha melhor volta',
+  'With an imported reference lap (.ibt or Garage 61), put each brake point, minimum and throttle point half-way between that lap and your own best, so you close the gap step by step. Off: follow the imported lap as it is.':
+    'Com uma volta de referência importada (.ibt ou Garage 61), coloca cada ponto de freio, mínima e retomada no meio do caminho entre essa volta e a sua melhor, para você fechar a diferença aos poucos. Desligado: segue a volta importada como ela é.',
+  'Braking Coach: Mark Brake Point': 'Coach de frenagem: marcar ponto de freio',
+  'Press where you braked to make it the brake point of that corner (this car, this track)':
+    'Aperte onde você freou para que esse seja o ponto de freio da curva (neste carro, nesta pista)',
+  Corners: 'Curvas',
+  'Join a session (a Test Drive will do) to see and edit the corners of that track and car.':
+    'Entre numa sessão (um Test Drive serve) para ver e editar as curvas dessa pista e carro.',
+  Refresh: 'Atualizar',
+  'Tips: {source}': 'Dicas: {source}',
+  'No reference lap yet: the corners come from the tips only. Drive a clean lap for the brake points.':
+    'Ainda não há volta de referência: as curvas vêm só das dicas. Dê uma volta limpa para ter os pontos de freio.',
+  'Tips, labels and the spoken reference point are kept for the track; minimum, gear and your marked brake points for this car. Press the "Braking Coach: Mark Brake Point" key (Ctrl+Shift+B by default) where you brake to mark it.':
+    'Dicas, nomes e o ponto de referência falado valem para a pista; mínima, marcha e os pontos de freio que você marcou valem para este carro. Aperte o atalho "Coach de frenagem: marcar ponto de freio" (Ctrl+Shift+B por padrão) onde você freia para marcar.',
+  'No corners found yet.': 'Nenhuma curva encontrada ainda.',
+  'Brake point': 'Ponto de freio',
+  'Min (km/h)': 'Mín. (km/h)',
+  Tip: 'Dica',
+  'Spoken reference': 'Referência falada',
+  Hide: 'Ocultar',
+  '(lift)': '(alívio)',
+  'Back to the reference brake point': 'Voltar ao ponto de freio da referência',
+  'tip only': 'só a dica',
+  'e.g. "the bridge"': 'ex.: "a ponte"',
+  'Saving...': 'Salvando...',
+  'Discard changes': 'Descartar alterações',
+  'Clear my marks': 'Apagar minhas marcas',
+  'Remove your brake points, minimums and gears for this car on this track? The tips stay.':
+    'Apagar seus pontos de freio, mínimas e marchas deste carro nesta pista? As dicas continuam.',
 };

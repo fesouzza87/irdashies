@@ -19,6 +19,7 @@ export default defineWidgetManifest({
     lookS: 3.5,
     feedback: true,
     hideIdle: true,
+    blend: true,
     background: { opacity: 0.85 },
     showOnlyWhenOnTrack: true,
     // Like the original "practice only": quiet in races and qualifying.
@@ -89,6 +90,12 @@ export default defineWidgetManifest({
       label: 'Hide on Straights',
       description:
         'Hide the panel between corners instead of showing the next corner',
+    },
+    blend: {
+      type: 'boolean',
+      label: 'Half-way with My Best Lap',
+      description:
+        'With an imported reference lap (.ibt or Garage 61), put each brake point, minimum and throttle point half-way between that lap and your own best, so you close the gap step by step. Off: follow the imported lap as it is.',
     },
     showOnlyWhenOnTrack: {
       type: 'boolean',

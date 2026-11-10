@@ -12,6 +12,7 @@ import { SettingSliderRow } from '../components/SettingSliderRow';
 import { SessionVisibility } from '../components/SessionVisibility';
 import { TabButton } from '../components/TabButton';
 import { SettingProps, settingPropFor } from '../components/SettingProp';
+import { BrakingCoachCorners } from './BrakingCoachCorners';
 
 const SETTING_ID = 'brakingcoach';
 const SettingProp = settingPropFor(SETTING_ID);
@@ -71,6 +72,13 @@ export const BrakingCoachSettings = () => {
                 {t('Display')}
               </TabButton>
               <TabButton
+                id="track"
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+              >
+                {t('Corners')}
+              </TabButton>
+              <TabButton
                 id="styling"
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
@@ -94,6 +102,7 @@ export const BrakingCoachSettings = () => {
                     scaleWidgetId={SETTING_ID}
                   >
                     <SettingProp path="referenceSource" />
+                    <SettingProp path="blend" />
                     <SettingProp path="level" />
                     <SettingProp path="lookS" />
                     <SettingProp path="feedback" />
@@ -113,6 +122,15 @@ export const BrakingCoachSettings = () => {
                     />
                   </SettingsSection>
                 </>
+              )}
+
+              {activeTab === 'track' && (
+                <SettingsSection title={t('Corners')}>
+                  <BrakingCoachCorners
+                    referenceSource={settings.config.referenceSource}
+                    blend={settings.config.blend}
+                  />
+                </SettingsSection>
               )}
 
               {activeTab === 'styling' && (

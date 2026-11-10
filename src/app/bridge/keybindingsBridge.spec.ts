@@ -102,6 +102,12 @@ const sampleBindings = (): KeybindingsMap => ({
     description: '',
     isDefault: true,
   },
+  'coach-mark': {
+    accelerator: '',
+    label: '',
+    description: '',
+    isDefault: true,
+  },
 });
 
 const invokeUpdate = (

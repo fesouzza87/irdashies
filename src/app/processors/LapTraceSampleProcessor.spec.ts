@@ -17,6 +17,7 @@ const driving = (overrides: Record<string, number | boolean> = {}) =>
     BrakeRaw: 0.05,
     Speed: 61.2,
     Gear: 4,
+    SteeringWheelAngle: -0.35,
     BrakeABSactive: false,
     OnPitRoad: false,
     IsOnTrack: true,
@@ -41,6 +42,8 @@ describe('LapTraceSampleProcessor', () => {
       brake: 0.05,
       speed: 61.2,
       gear: 4,
+      // For the braking coach: which way each corner turns.
+      steer: -0.35,
       brakeAbsActive: false,
       onPitRoad: false,
       isOnTrack: true,

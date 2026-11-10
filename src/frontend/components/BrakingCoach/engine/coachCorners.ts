@@ -5,6 +5,7 @@ import {
   detectCorners,
   NOTE_MATCH_M,
 } from './detectCorners';
+import type { CoachTurns } from '@irdashies/types';
 import type {
   CoachCorner,
   CoachMark,
@@ -244,4 +245,31 @@ export function addCornerDirs(
     c.dir = cornerDir(steer, n, a, b, L);
   });
   return corners;
+}
+
+/**
+ * Everything together, as the coach and the Settings table use it: corners
+ * for the chosen mode, with the side each one turns from the steering trace.
+ */
+export function coachCornersFor({
+  mine,
+  pro,
+  mode,
+  notes,
+  marks,
+  turns,
+  lengthM,
+}: {
+  mine: CoachRef | null;
+  pro: CoachRef | null;
+  mode: CoachFollowMode;
+  notes: readonly CoachNote[];
+  marks: readonly CoachMark[];
+  turns: CoachTurns | null;
+  lengthM: number | null;
+}): { corners: CoachCorner[]; timing: CoachRef | null } {
+  const length = lengthM || mine?.lengthM || pro?.lengthM || null;
+  const out = effectiveCorners(mine, pro, mode, notes, marks, length);
+  addCornerDirs(out.corners, turns?.steer, length);
+  return out;
 }

@@ -5,7 +5,8 @@ export type StaticKeybindingActionId =
   | 'save-telemetry'
   | 'prev-profile'
   | 'next-profile'
-  | 'radar-flip-pole-side';
+  | 'radar-flip-pole-side'
+  | 'coach-mark';
 
 /**
  * Dynamic per-widget show/hide action, keyed by the widget instance id, e.g.
@@ -130,6 +131,13 @@ export const DEFAULT_KEYBINDINGS: KeybindingsMap = {
     label: 'Radar: Flip Pole Side',
     description:
       'Swap the pole line side on the radar for the current track and remember it',
+    isDefault: true,
+  },
+  'coach-mark': {
+    accelerator: 'CommandOrControl+Shift+B',
+    label: 'Braking Coach: Mark Brake Point',
+    description:
+      'Press where you braked to make it the brake point of that corner (this car, this track)',
     isDefault: true,
   },
 };

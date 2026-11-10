@@ -164,6 +164,7 @@ const sampleAt = (
   brake: 0,
   speed: speedMs,
   gear: 4,
+  steer: 0,
   brakeAbsActive: false,
   onPitRoad: false,
   isOnTrack: true,

@@ -1519,6 +1519,11 @@ export interface BrakingCoachConfig {
   feedback: boolean;
   /** Hide the panel on the straights instead of showing the next corner. */
   hideIdle: boolean;
+  /**
+   * With an imported reference (the "professor's" lap), coach half-way between
+   * it and your own best lap, as Dex's "mix" mode.
+   */
+  blend: boolean;
   background: { opacity: number };
   showOnlyWhenOnTrack: boolean;
   sessionVisibility: SessionVisibilitySettings;

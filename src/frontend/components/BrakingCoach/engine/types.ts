@@ -43,25 +43,7 @@ export interface DetectedCorner {
   pk: number;
 }
 
-/** A tip for one corner of a track (from a track guide, or written by hand). */
-export interface CoachNote {
-  /** Lap fraction of the corner. */
-  p: number;
-  label?: string;
-  note?: string;
-  /** Short spoken reference point, read out before the brake point. */
-  say?: string;
-  /** Hidden corners give no cues. */
-  hide?: boolean;
-}
-
-/** The driver's own adjustment to a corner: brake point, minimum, gear. */
-export interface CoachMark {
-  p: number;
-  bp?: number;
-  vmin?: number;
-  gear?: number;
-}
+export type { CoachMark, CoachNote } from '@irdashies/types';
 
 /** A corner as the coach uses it: detected, named, adjusted. */
 export interface CoachCorner {

@@ -24,6 +24,7 @@ export const BrakingCoach = (props: BrakingCoachProps) => {
     volume: config.volume,
     lookS: config.lookS,
     feedback: config.feedback,
+    blend: config.blend,
     active: shown,
   });
 

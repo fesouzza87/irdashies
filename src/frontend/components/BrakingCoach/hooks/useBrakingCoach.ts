@@ -1,19 +1,23 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type {
   BrakingCoachBeep,
   BrakingCoachLevel,
   LapTraceSampleSnapshot,
 } from '@irdashies/types';
-import { getChannelSnapshotStore, useLapTraceStore } from '@irdashies/context';
+import {
+  getChannelSnapshotStore,
+  useTrackDisplayName,
+} from '@irdashies/context';
+import logger from '@irdashies/utils/logger';
 import {
   playCueTone,
   primeBrakeCueAudio,
   type CueTone,
 } from '@irdashies/utils/brakeCueAudio';
-import { buildCoachRef } from '../engine/coachRef';
-import { mergeCorners } from '../engine/coachCorners';
 import { CoachTracker } from '../engine/coachTracker';
-import type { CoachBeep, CoachCorner, CoachState } from '../engine/types';
+import { markAt, TurnsRecorder } from '../engine/coachMarks';
+import type { CoachBeep, CoachState } from '../engine/types';
+import { useCoachSetup, type CoachSetup } from './useCoachSetup';
 
 /** The original's beeps (winsound.Beep frequency and length), as tones. */
 export const COACH_TONES: Record<CoachBeep, CueTone> = {
@@ -21,6 +25,12 @@ export const COACH_TONES: Record<CoachBeep, CueTone> = {
   brake: { frequency: 1250, type: 'sine', durationSec: 0.23, peak: 1 },
   go: { frequency: 1750, type: 'sine', durationSec: 0.08, peak: 0.8 },
 };
+
+/** Two rising notes: the brake point was marked. */
+const MARK_TONES: CueTone[] = [
+  { frequency: 700, type: 'sine', durationSec: 0.06, peak: 1 },
+  { frequency: 1100, type: 'sine', durationSec: 0.09, peak: 1 },
+];
 
 /** The overlay redraws at most this often (the original draws at 30 fps). */
 const RENDER_INTERVAL_MS = 33;
@@ -32,6 +42,8 @@ export interface BrakingCoachOptions {
   volume: number;
   lookS: number;
   feedback: boolean;
+  /** With an imported reference, coach half-way between it and your best. */
+  blend: boolean;
   /**
    * The coach is on screen for this session. When not (a race with "practice
    * only"), it keeps following the corners but stays silent, like the
@@ -46,31 +58,12 @@ const stateKey = (st: CoachState) =>
     st.phase,
     st.corner?.n ?? '',
     st.corner?.lastVmin ?? '',
+    st.corner?.marked ? 'm' : '',
     st.d ?? '',
     st.k ?? '',
-    st.next ? `${st.next.label}:${st.next.d}` : '',
+    st.next ? `${st.next.label}:${st.next.d}:${st.next.dir}` : '',
     st.feedback ? `${st.feedback.n}:${st.feedback.dt}` : '',
   ].join('|');
-
-/** The corners of the reference lap, as the coach uses them. */
-export const useCoachCorners = (): {
-  corners: CoachCorner[];
-  lengthM: number | null;
-  timing: ReturnType<typeof buildCoachRef>;
-} => {
-  const referenceLap = useLapTraceStore((s) => s.referenceLap);
-  const trackLengthM = useLapTraceStore((s) => s.trackLengthM);
-  return useMemo(() => {
-    const ref = referenceLap ? buildCoachRef(referenceLap) : null;
-    const lengthM = trackLengthM > 0 ? trackLengthM : (ref?.lengthM ?? null);
-    // Track tips and the driver's own marks come in the next step.
-    return {
-      corners: mergeCorners(ref, [], [], lengthM),
-      lengthM,
-      timing: ref,
-    };
-  }, [referenceLap, trackLengthM]);
-};
 
 const toSample = (s: LapTraceSampleSnapshot) => ({
   pct: s.lapDistPct,
@@ -88,9 +81,14 @@ const toSample = (s: LapTraceSampleSnapshot) => ({
  * without a React render per frame), beeps played straight from the
  * subscription, and the drawn state handed to React at most ~30 times a
  * second, and only when something visible changed.
+ *
+ * Also keeps the first clean lap's steering for the track (which way each
+ * corner turns) and answers the "mark brake point" key.
  */
 export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
-  const { corners, lengthM, timing } = useCoachCorners();
+  const setup = useCoachSetup(options.blend);
+  const { corners, timing, lengthM, trackKey } = setup;
+  const trackName = useTrackDisplayName();
   const tracker = useRef<CoachTracker | null>(null);
   if (!tracker.current) {
     tracker.current = new CoachTracker({
@@ -99,6 +97,8 @@ export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
       feedback: options.feedback,
     });
   }
+  const turns = useRef(new TurnsRecorder());
+  const lastPct = useRef(-1);
   const [state, setState] = useState<CoachState>(() => ({
     phase: corners.length ? 'idle' : 'noref',
     beeps: [],
@@ -106,6 +106,11 @@ export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
 
   const opts = useRef(options);
   opts.current = options;
+  const live = useRef<CoachSetup & { trackName: string }>({
+    ...setup,
+    trackName: trackName ?? '',
+  });
+  live.current = { ...setup, trackName: trackName ?? '' };
 
   useEffect(() => {
     tracker.current?.setOptions({
@@ -120,6 +125,14 @@ export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
     setState({ phase: corners.length ? 'idle' : 'noref', beeps: [] });
   }, [corners, timing, lengthM]);
 
+  // Steering is only collected while the track has none stored.
+  const needTurns = !!trackKey && !!lengthM && !setup.data.turns;
+  const collecting = useRef(false);
+  useEffect(() => {
+    collecting.current = needTurns;
+    if (needTurns && lengthM) turns.current.reset(lengthM);
+  }, [needTurns, lengthM, trackKey]);
+
   const beepsOn =
     options.active &&
     options.level === 'full' &&
@@ -129,6 +142,26 @@ export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
     // Open the audio device ahead of the first beep.
     if (beepsOn) primeBrakeCueAudio();
   }, [beepsOn]);
+
+  useEffect(() => {
+    const bridge = window.coachBridge;
+    if (!bridge) return;
+    return bridge.onMark(() => {
+      const s = live.current;
+      const pct = lastPct.current;
+      if (pct < 0 || !s.trackKey || !s.carPath) return;
+      const result = markAt(pct, s.corners, s.data.marks, s.lengthM ?? 0);
+      if (!result) return;
+      const volume = opts.current.volume;
+      if (volume > 0) {
+        playCueTone(MARK_TONES[0], volume);
+        window.setTimeout(() => playCueTone(MARK_TONES[1], volume), 70);
+      }
+      bridge
+        .saveMarks(s.trackKey, s.carPath, s.trackName, result.marks)
+        .catch((e) => logger.warn('[Coach] Failed to save a mark', e));
+    });
+  }, []);
 
   useEffect(() => {
     const bridge = window.channelBridge;
@@ -143,7 +176,26 @@ export const useBrakingCoach = (options: BrakingCoachOptions): CoachState => {
       const engine = tracker.current;
       if (!snapshot || !engine) return;
       const now = performance.now();
-      const st = engine.feed(toSample(snapshot), now);
+      const sample = toSample(snapshot);
+      lastPct.current = sample.ok ? sample.pct : -1;
+
+      if (collecting.current) {
+        const lap = turns.current.feed(
+          sample.pct,
+          snapshot.steer ?? 0,
+          sample.ok,
+          snapshot.incidentCount
+        );
+        const key = live.current.trackKey;
+        if (lap && key) {
+          collecting.current = false;
+          window.coachBridge
+            ?.saveTurns(key, lap)
+            .catch((e) => logger.warn('[Coach] Failed to save turns', e));
+        }
+      }
+
+      const st = engine.feed(sample, now);
       const o = opts.current;
       if (st.beeps.length && o.active && o.level === 'full' && o.volume > 0) {
         for (const b of st.beeps) playCueTone(COACH_TONES[b], o.volume);

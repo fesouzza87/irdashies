@@ -1,5 +1,9 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import type {
+  CoachBridge,
+  CoachMark,
+  CoachNote,
+  CoachTurns,
   Session,
   Telemetry,
   IrSdkBridge,
@@ -409,6 +413,42 @@ export function exposeBridge() {
       time: number
     ) => ipcRenderer.invoke('personalBest:set', trackId, carName, time),
   } as PersonalBestLapBridge);
+
+  contextBridge.exposeInMainWorld('coachBridge', {
+    getTrackData: (trackKey: string, carPath: string) =>
+      ipcRenderer.invoke('coach:getTrackData', trackKey, carPath),
+    saveNotes: (trackKey: string, trackName: string, notes: CoachNote[]) =>
+      ipcRenderer.invoke('coach:saveNotes', trackKey, trackName, notes),
+    saveMarks: (
+      trackKey: string,
+      carPath: string,
+      trackName: string,
+      marks: CoachMark[]
+    ) =>
+      ipcRenderer.invoke(
+        'coach:saveMarks',
+        trackKey,
+        carPath,
+        trackName,
+        marks
+      ),
+    clearMarks: (trackKey: string, carPath: string) =>
+      ipcRenderer.invoke('coach:clearMarks', trackKey, carPath),
+    saveTurns: (trackKey: string, turns: CoachTurns) =>
+      ipcRenderer.invoke('coach:saveTurns', trackKey, turns),
+    getCurrentSession: () => ipcRenderer.invoke('coach:getCurrentSession'),
+    onChanged: (callback: (trackKey: string) => void) => {
+      const handler = (_: Electron.IpcRendererEvent, trackKey: string) =>
+        callback(trackKey);
+      ipcRenderer.on('coach:changed', handler);
+      return () => ipcRenderer.removeListener('coach:changed', handler);
+    },
+    onMark: (callback: () => void) => {
+      const handler = () => callback();
+      ipcRenderer.on('coach:mark', handler);
+      return () => ipcRenderer.removeListener('coach:mark', handler);
+    },
+  } satisfies CoachBridge);
 
   contextBridge.exposeInMainWorld('lapTraceBridge', {
     getLapTrace: (trackId: number, carPath: string, kind: LapTraceSource) =>

@@ -64,6 +64,12 @@ export class KeybindingManager {
     this.actionHandlers.set('radar-flip-pole-side', () => {
       void this.flipRadarPoleSide();
     });
+
+    // The coach window decides which corner the press belongs to: it is the
+    // one that knows where the car is and where the corners are.
+    this.actionHandlers.set('coach-mark', () => {
+      this.overlayManager.publishMessage('coach:mark', null);
+    });
   }
 
   // ponytail: dynamic import keeps storage/dashboards out of the constructor's

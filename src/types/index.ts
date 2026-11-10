@@ -15,6 +15,7 @@ export * from './gantryDock';
 export * from './gantryStandings';
 export * from './defaultDashboard';
 export * from './widgetPreview';
+export * from './coach';
 export * from './cornerName';
 export * from './lapTrace';
 export * from './lmu';

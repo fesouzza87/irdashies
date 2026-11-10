@@ -125,6 +125,11 @@ export interface LapTraceSampleSnapshot {
   speed: number;
   /** raw iRacing gear */
   gear: number;
+  /**
+   * SteeringWheelAngle, radians, positive = left. Read by the braking coach to
+   * tell which way each corner turns; 0 where the sim does not publish it.
+   */
+  steer: number;
   brakeAbsActive: boolean;
   onPitRoad: boolean;
   isOnTrack: boolean;
